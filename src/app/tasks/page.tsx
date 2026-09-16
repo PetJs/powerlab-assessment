@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import { PlusSignIcon } from "hugeicons-react";
 import { prisma } from "@/lib/db";
 import TaskList from "@/components/TaskList";
 import TaskModal from "@/components/TaskModal";
@@ -14,11 +15,12 @@ export default async function TasksPage() {
   return (
     <div className="mx-auto w-full max-w-3xl px-6 py-12">
       <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-[#171717]">Tasks</h1>
+        <h1 className="text-2xl font-semibold text-[#171717]">PowerLab Assessment(Task Board)</h1>
         <Link
           href="/tasks?task=new"
-          className="rounded-full bg-[#171717] px-4 py-2 text-sm font-medium text-[#ffffff]"
+          className="flex items-center gap-1.5 rounded-full bg-[#171717] px-4 py-2 text-sm font-medium text-[#ffffff]"
         >
+          <PlusSignIcon size={16} />
           New Task
         </Link>
       </div>

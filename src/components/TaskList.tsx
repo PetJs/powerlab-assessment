@@ -28,7 +28,8 @@ export default function TaskList({ tasks }: { tasks: Task[] }) {
         <li key={task.id}>
           <Link
             href={`/tasks?task=${task.id}`}
-            className="flex items-center justify-between gap-4 rounded-lg border border-[#e5e5e5] px-4 py-3"
+            title="Click to view"
+            className="flex items-center justify-between gap-4 rounded-lg border border-[#e5e5e5] px-4 py-3 hover:bg-[#fafafa]"
           >
             <div className="flex flex-col gap-1">
               <span className="font-medium text-[#171717]">{task.title}</span>
