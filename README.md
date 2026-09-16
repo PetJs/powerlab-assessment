@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Task Management App
 
-## Getting Started
+A simple task management app built for the Software Engineering Internship practical assessment. Create, list, view, update, and delete tasks (title, description, status, due date, created date), persisted in a local SQLite database.
 
-First, run the development server:
+## Tech stack
+
+- **Next.js 16** (App Router, TypeScript) — also serves as the API layer via Route Handlers
+- **SQLite** via **Prisma ORM 7** (file-based database, no external DB server)
+- **Zod** for input validation
+- **Hugeicons** for icons
+- **Tailwind CSS ** for styling
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 20.19+ 
+
+### Setup
+
+```bash
+npm install
+npx prisma migrate dev
+```
+
+`npm install` installs dependencies. `npx prisma migrate dev` creates the local SQLite database (`dev.db`, at the project root) and applies the schema.
+
+### Environment variables
+
+A `.env` file with the database connection string is required:
+
+```env
+DATABASE_URL="file:./dev.db"
+```
+
+This is already present in the repo for local development convenience (it only points at a local SQLite file). If it's missing, create it before running `prisma migrate dev`.
+
+### Run the app
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) — it redirects to `/tasks`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How it works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `/tasks` — Server Component that lists all tasks, queried directly from the database.
+- Viewing, editing, and creating a task all happen in a **modal** on top of the list (no separate pages), with the open task reflected in the URL as a query param:
+  - `/tasks?task=new` — create
+  - `/tasks?task=<id>` — view
+  - `/tasks?task=<id>&edit=1` — edit
+- The modal fetches/mutates data through a small REST API:
+  - `GET /api/tasks` — list (optionally `?status=TODO|IN_PROGRESS|DONE`)
+  - `POST /api/tasks` — create task
+  - `GET /api/tasks/:id` — fetch task with id
+  - `PUT /api/tasks/:id` — update task
+  - `DELETE /api/tasks/:id` — delete task
+- All input is validated with Zod on the server; invalid input returns `400` with field-level errors, a missing task returns `404`, and unexpected failures return `500`.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
